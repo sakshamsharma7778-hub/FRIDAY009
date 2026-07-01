@@ -41,7 +41,7 @@ export default function Home() {
   const data = await res.json();
   setReply(data.reply);
   speak(data.reply);
-};
+};g
   }
 
   async function sendMessage() {
@@ -51,7 +51,7 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ message }),
-    });
+    });GIT
 
     const data = await res.json();
     setReply(data.reply);
