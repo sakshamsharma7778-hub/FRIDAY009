@@ -42,8 +42,11 @@ export async function POST(req: Request) {
         reply: "All memories cleared.",
       });
     }
-if (lowerMessage.includes("what's my game name") ||
-    lowerMessage.includes("what is my game name")) {
+if (
+  lowerMessage.includes("what's my game name") ||
+  lowerMessage.includes("what is my game name") ||
+  lowerMessage.includes("whats my game name")
+) {
 
   const memories = getMemories();
 
