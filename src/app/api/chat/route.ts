@@ -1,12 +1,15 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { addMemory, getMemories } from "./memory";
+import {
+  addMemory,
+  getMemories,
+  clearMemories,
+} from "./memory";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(req: Request) {
   try {
     const { message, memory } = await req.json();
-
     const lowerMessage = message.toLowerCase();
 
     if (
@@ -18,6 +21,25 @@ export async function POST(req: Request) {
 
       return Response.json({
         reply: "Understood, Saksham. I’ll remember that.",
+      });
+    }
+
+    if (lowerMessage === "show memories") {
+      const memories = getMemories();
+
+      return Response.json({
+        reply:
+          memories.length === 0
+            ? "I don't have any saved memories."
+            : memories.map((m, i) => `${i + 1}. ${m}`).join("\n"),
+      });
+    }
+
+    if (lowerMessage === "clear memories") {
+      clearMemories();
+
+      return Response.json({
+        reply: "All memories cleared.",
       });
     }
 
@@ -54,7 +76,8 @@ ${message}
     console.error(error);
 
     return Response.json({
-      reply: "I'm sorry, Saksham. Gemini is busy right now. Try again in a moment.",
+      reply:
+        "I'm sorry, Saksham. Gemini is busy right now. Try again in a moment.",
     });
   }
 }
