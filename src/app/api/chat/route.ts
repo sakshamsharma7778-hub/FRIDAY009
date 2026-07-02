@@ -42,7 +42,30 @@ export async function POST(req: Request) {
         reply: "All memories cleared.",
       });
     }
+if (lowerMessage.includes("what's my game name") ||
+    lowerMessage.includes("what is my game name")) {
 
+  const memories = getMemories();
+
+  const gameMemory = memories.find(m =>
+    m.toLowerCase().includes("game name")
+  );
+
+  if (gameMemory) {
+    const gameName = gameMemory
+      .replace(/remember/i, "")
+      .replace(/my game name is/i, "")
+      .trim();
+
+    return Response.json({
+      reply: `Your game name is ${gameName}.`,
+    });
+  }
+
+  return Response.json({
+    reply: "I don't know your game name yet.",
+  });
+}
     const savedMemories = getMemories();
 
     const model = genAI.getGenerativeModel({
